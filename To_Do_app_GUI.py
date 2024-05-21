@@ -8,9 +8,31 @@ def main(page: Page):
     BL ="#3D3935"
     BLUE= "#4849EF"
     
+    
+    create_task_view = Container(
+            content=Container(on_click=lambda _: page.go('/'),
+                content=Text("x",)
+            ))
+    
+    tasks = Column(
+        height= 400,
+        scroll="auto",
+        controls=
+        [
+            # Container(height=50,width=300, bgcolor="red"),
+            # Container(height=50,width=300, bgcolor="red"),
+            # Container(height=50,width=300, bgcolor="red"),
+            # Container(height=50,width=300, bgcolor="red"),
+        ]
+    )
+    for i in range(10):
+        tasks.controls.append(
+            Container(height=50,width=400,bgcolor=FG,border_radius=20),
+            
+        )
     categories_card = Row(scroll ="auto")
     categories = ["Business", "Family", "Friends"]
-    for category in categories:
+    for i,category in enumerate(categories):
         categories_card.controls.append(
             Container(
             padding=15,
@@ -27,7 +49,7 @@ def main(page: Page):
                         height=5,
                         bgcolor="white12",
                         border_radius=10,
-                        padding=padding.only(right=2),
+                        padding=padding.only(right=i*30),
                         content=Container(
                             bgcolor=PINK,
                         ),
@@ -62,7 +84,17 @@ def main(page: Page):
                     padding =padding.only(top=10, bottom=20),
                     content = categories_card,
                     bgcolor=BG,
+                ),
+                Text("Todays Tasks"),
+                Stack(
+                    controls=[
+                        tasks,
+                        FloatingActionButton(bottom =2,right=20,
+                            icon =icons.ADD,on_click=lambda _: page.go('create_task')
+                        )
+                    ]
                 )
+                
             ]
         )
     )
@@ -99,6 +131,31 @@ def main(page: Page):
         )
     )
     
+    pages = {
+        "/":View(
+                "/",
+                [
+                    container
+                ],
+        ),
+        "create_task":View(
+            "/create_task",
+            [
+                create_task_view
+            ],
+        )   
+        
+    }
+    def route_change(route):
+        page.views.clear()
+        page.views.append(
+            pages[page.route]
+        )
+    
     page.add(container)
+    
+    
+    page.on_route_change =route_change
+    page.go(page.route)
 
 app(target=main)
