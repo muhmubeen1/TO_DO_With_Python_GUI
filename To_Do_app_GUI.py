@@ -1,5 +1,5 @@
 from flet import *
-
+from custom_checkbox import CustomCheckBox
 def main(page: Page):
     BG = "#041955"
     FWG = "#97b4ff"
@@ -8,7 +8,12 @@ def main(page: Page):
     BL ="#3D3935"
     BLUE= "#4849EF"
     
+    def shrink(e):
+        page_2.controls[0].width =120
+        page_2.controls[0].scale = transform.Scale(0.8,alignment=alignment.center_right)
+        page_2.update()
     
+            
     create_task_view = Container(
             content=Container(on_click=lambda _: page.go('/'),
                 content=Text("x",)
@@ -27,9 +32,13 @@ def main(page: Page):
     )
     for i in range(10):
         tasks.controls.append(
-            Container(height=50,width=400,bgcolor=FG,border_radius=20),
+            Container(height=60,width=400,
+                    bgcolor=FG,border_radius=20,
+                    padding= padding.only(left=35,top=20)
+                    ,content = CustomCheckBox(PINK,label="Create Interesting Tasks",size=20,)),
             
         )
+        
     categories_card = Row(scroll ="auto")
     categories = ["Business", "Family", "Friends"]
     for i,category in enumerate(categories):
@@ -66,7 +75,7 @@ def main(page: Page):
             controls=[
                 Row(alignment="spaceBetween",
                     controls=[
-                        Container(
+                        Container(on_click =lambda _: shrink(e),
                             content=Icon(icons.MENU)
                         ),
                         Row(
@@ -108,6 +117,8 @@ def main(page: Page):
                 height=850,
                 bgcolor=BG,
                 border_radius=35,
+                animate =animation(600,AnimationCurve.DECELERATE),
+                animate_scale =animation.Animation(400,curve="decelerate"),
                 padding=padding.only(top=50, left=20, right=20, bottom=5),
                 content=Column(
                     controls=[
@@ -126,7 +137,7 @@ def main(page: Page):
         content=Stack(
             controls=[
                 page_1,
-                page_2
+                page_2,
             ]
         )
     )
