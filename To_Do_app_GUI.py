@@ -7,12 +7,24 @@ def main(page: Page):
     PINK = "#eb06ff"
     BL ="#3D3935"
     BLUE= "#4849EF"
-    
-    def shrink(e):
-        page_2.controls[0].width =120
-        page_2.controls[0].scale = transform.Scale(0.8,alignment=alignment.center_right)
+    def restore(e):
+        page_2.controls[0].width = 400
+        page_2.controls[0].sclae = transform.Scale(
+            1,alignment=alignment.center_right)
+        page_2.controls[0].border_radius = border_radius.only(
+            top_left=35,
+            top_right=0,
+            bottom_left=35,
+            bottom_right=0
+        )
         page_2.update()
-    
+        
+    def shrink(e):  
+        page_2.controls[0].width =120
+        page_2.controls[0].sclae = transform.Scale(1,alignment=alignment.center_right)
+        page_2.update()
+        
+        
             
     create_task_view = Container(
             content=Container(on_click=lambda _: page.go('/'),
@@ -75,7 +87,8 @@ def main(page: Page):
             controls=[
                 Row(alignment="spaceBetween",
                     controls=[
-                        Container(on_click =lambda _: shrink(e),
+                        Container(
+                            on_click = lambda e: shrink(e),
                             content=Icon(icons.MENU)
                         ),
                         Row(
@@ -108,17 +121,46 @@ def main(page: Page):
         )
     )
 
-    page_1 = Container()
+    page_1 = Container(
+        width=400,
+        height=850,
+        bgcolor=BG,
+        border_radius=35,
+        padding=padding.only(top=60, left=50, right=200),
+        content= Column
+        (
+            controls=
+            [
+            Row
+            (
+                controls=
+                [
+                    Container
+                    (   
+                        border_radius=25,
+                        padding=padding.only(top=13,left=13),
+                        height=50,
+                        width=50,
+                        border= border.all(color="white",width=1),
+                        on_click = lambda e: restore(e),
+                        content =Text("<")
+                    )  
+                ]       
+            )
+                
+            ]
+        )
+    )
 
-    page_2 = Row(
+    page_2 = Row( alignment="end",
         controls=[
             Container(
                 width=400,
                 height=850,
                 bgcolor=BG,
                 border_radius=35,
-                animate =animation(600,AnimationCurve.DECELERATE),
-                animate_scale =animation.Animation(400,curve="decelerate"),
+                animate = animation.Animation(600,AnimationCurve.DECELERATE),
+                animate_scale = animation.Animation(400, curve ="decelerate"),
                 padding=padding.only(top=50, left=20, right=20, bottom=5),
                 content=Column(
                     controls=[
